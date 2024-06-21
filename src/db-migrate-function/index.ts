@@ -140,11 +140,14 @@ const buildConnectionString = (
 ): string => {
   const { username, password, host, port, engine } = databaseSecret;
 
+  const encodedPassword = encodeURIComponent(password);
+  const encodedUsername = encodeURIComponent(username);
+
   switch (engine) {
     case 'mysql':
-      return `mysql://${username}:${password}@tcp(${host}:${port})/${dbName}`;
+      return `mysql://${encodedUsername}:${encodedPassword}@tcp(${host}:${port})/${dbName}`;
     case 'postgres':
-      return `postgres://${username}:${password}@${host}:${port}/${dbName}`;
+      return `postgres://${encodedUsername}:${encodedPassword}@${host}:${port}/${dbName}`;
     default:
       throw new Error(
         `Unsupported (or not yet implemented) database engine for migrate target: ${databaseSecret.engine}`,
